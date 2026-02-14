@@ -19,25 +19,7 @@ body, html {
   overflow: hidden;
 }
 
-/* --- PC版 --- */
-@media screen and (min-width: 1901px) {
-  .book-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 60px; padding: 60px;
-    width: 100%; max-width: 2600px; margin: 0 auto;
-    height: 100vh; overflow-y: scroll;
-  }
-  .book-card {
-    display: flex; background: var(--bg-card);
-    border: 1px solid #1a1a1a; border-radius: 20px;
-    padding: 50px; align-items: center;
-  }
-  .book-cover-container { flex: 0 0 35%; display: flex; justify-content: center; }
-  .book-cover { max-width: 100%; max-height: 500px; object-fit: contain; }
-  .book-info { flex: 1; padding-left: 60px; }
-}
-
-/* --- スマホ・標準PC（リール版） --- */
+/* --- スマホ・標準PC（リール表示） --- */
 @media screen and (max-width: 1900px) {
   .book-grid {
     display: block; 
@@ -45,7 +27,10 @@ body, html {
     overflow-y: scroll; 
     scroll-snap-type: y mandatory;
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .book-grid::-webkit-scrollbar { display: none; }
+
   .book-card {
     height: 100dvh;
     width: 100%;
@@ -58,7 +43,7 @@ body, html {
     overflow: hidden;
   }
 
-  /* 上半分50%：画像エリア */
+  /* 上部50%：画像エリア (お前の指定通り、隙間とサイズを維持) */
   .book-cover-container {
     height: 50dvh; 
     width: 100%;
@@ -72,28 +57,28 @@ body, html {
   }
   .book-cover { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-  /* 下半分50%：情報エリア */
+  /* 下部50%：情報エリア (独立スクロールを完全停止) */
   .book-info {
     height: 50dvh; 
     flex-shrink: 0;
     background: var(--bg-card);
     border-top: 1px solid #1a1a1a;
     border-radius: 30px 30px 0 0;
-    /* 下部のパディングを増やして1行分の空白を確保 */
-    padding: 30px 25px 100px; 
+    padding: 30px 25px 60px;
     box-shadow: 0 -20px 50px rgba(0,0,0,0.9);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     
-    /* スクロールバー非表示（Firefox / IE） */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    /* 【修正】ここでのスクロールを完全に禁止 */
+    overflow: hidden !important; 
   }
+}
 
-  /* スクロールバー非表示（Chrome / Safari） */
-  .book-info::-webkit-scrollbar {
-    display: none;
-  }
+/* PC版 (念のため維持) */
+@media screen and (min-width: 1901px) {
+  .book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 60px; height: 100vh; overflow-y: scroll; }
+  .book-card { display: flex; background: var(--bg-card); border-radius: 20px; padding: 50px; align-items: center; }
+  .book-cover-container { flex: 0 0 35%; display: flex; justify-content: center; }
+  .book-cover { max-width: 100%; max-height: 500px; object-fit: contain; }
+  .book-info { flex: 1; padding-left: 60px; }
 }
 
 /* 共通パーツ */
@@ -106,5 +91,14 @@ body, html {
 .badge-ku { background: var(--accent-ku); color: #000; }
 .badge-pr { background: var(--accent-prime); color: #fff; }
 .star-text { color: var(--star-yellow); font-size: 18px; }
+
 .summary-container { border-left: 5px solid var(--accent-ku); padding-left: 15px; }
-.summary-text { font-size: 16px; line-height: 1.8; color: #eee; margin: 0; text-align: justify; }
+.summary-text { 
+  font-size: 16px; 
+  line-height: 1.8; 
+  color: #eee; 
+  margin: 0; 
+  text-align: justify;
+  /* 【追加】説明文の下に空白1行分を確保 */
+  padding-bottom: 1.8em; 
+}

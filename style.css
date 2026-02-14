@@ -21,7 +21,7 @@ body, html {
 /* --- PC版 (1025px以上) --- */
 @media screen and (min-width: 1025px) {
   body, html {
-    overflow: auto; /* PCは通常スクロール */
+    overflow: auto; /* PCは通常通りスクロール可能 */
   }
   .book-grid {
     display: grid;
@@ -49,7 +49,7 @@ body, html {
 /* --- スマホ・タブレット版 (1024px以下) --- */
 @media screen and (max-width: 1024px) {
   body, html {
-    overflow: hidden; /* スマホは1画面固定 */
+    overflow: hidden; /* スマホは1画面固定のリール形式 */
   }
   .book-grid {
     display: block; 
@@ -73,10 +73,10 @@ body, html {
     overflow: hidden;
   }
 
-  /* 上部40%：画像エリア */
+  /* 上部45%：画像エリア */
   .book-cover-container {
-    height: 40dvh; 
-    flex: 0 0 40dvh;
+    height: 45dvh; 
+    flex: 0 0 45dvh;
     width: 100%;
     display: flex; justify-content: center; align-items: center;
     padding: 30px 30px 10px;
@@ -87,18 +87,18 @@ body, html {
   }
   .book-cover { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-  /* 下部60%：情報エリア */
+  /* 下部55%：情報エリア */
   .book-info {
-    height: 60dvh; 
-    flex: 0 0 60dvh;
+    height: 55dvh; 
+    flex: 0 0 55dvh;
     background: var(--bg-card);
     border-top: 1px solid #1a1a1a;
     border-radius: 30px 30px 0 0;
-    /* セーフエリアを考慮したパディング */
-    padding: 30px 25px calc(60px + env(safe-area-inset-bottom));
+    /* 下部のパディングを最低限（セーフエリアのみ）に */
+    padding: 25px 25px calc(20px + env(safe-area-inset-bottom));
     box-shadow: 0 -20px 50px rgba(0,0,0,0.9);
     
-    /* 独立スクロールの禁止 */
+    /* 独立スクロールを完全停止 */
     overflow: hidden !important; 
   }
 }
@@ -107,14 +107,14 @@ body, html {
 .title-author-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
 .book-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.2; color: #fff; }
 .book-author { font-size: 14px; color: var(--text-muted); }
-.meta-row { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+.meta-row { display: flex; align-items: center; gap: 18px; margin-bottom: 15px; }
 .book-price { display: none; }
 .icon-badge { font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 4px; }
 .badge-ku { background: var(--accent-ku); color: #000; }
 .badge-pr { background: var(--accent-prime); color: #fff; }
 .star-text { color: var(--star-yellow); font-size: 18px; }
 
-/* 黄色バー修正：containerではなくtext自体に付与して末尾で止める */
+/* 黄色バー：テキストの長さに合わせ、下の空白を削除 */
 .summary-container { 
   border-left: none; 
   padding-left: 0; 
@@ -127,6 +127,6 @@ body, html {
   text-align: justify;
   border-left: 5px solid var(--accent-ku); 
   padding-left: 15px;
-  /* margin-bottomで空白を作ることで、バーが空白まで伸びるのを防ぐ */
-  margin-bottom: 1.8em; 
+  /* 下部の空白指定を削除 */
+  margin-bottom: 0; 
 }

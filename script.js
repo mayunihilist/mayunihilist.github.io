@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const cleanTitle = book.title.replace(/（\d+）|巻.*|\(.*\)| 1/g, '').trim();
 
-    // 画像コンテナと情報コンテナ（.book-info）の分離を維持
     card.innerHTML = `
       <div class="book-cover-container">
         <a href="${book.url}" target="_blank">
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="book-author">${book.author}</span>
         </div>
         <div class="meta-row">
-          <span class="book-price">${book.price}</span>
           ${badgeHtml}
           <span class="star-text">★${book.rating || 0}</span>
         </div>
@@ -53,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       bookGrid.innerHTML = "";
       data.forEach(book => bookGrid.appendChild(createBookCard(book)));
     } catch (err) {
-      console.error("データの読み込みに失敗しました:", err);
+      console.error("Data load failed:", err);
     }
   }
   init();

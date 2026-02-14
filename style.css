@@ -15,7 +15,7 @@ body, html {
   background-color: var(--bg-main);
   color: var(--text-main);
   font-family: "Hiragino Sans", "Meiryo", sans-serif;
-  overflow: hidden;
+  overflow: hidden; /* 全体のはみ出しを禁止 */
 }
 
 /* ----------------------------------------------------
@@ -32,6 +32,7 @@ body, html {
     display: flex; background: var(--bg-card);
     border: 1px solid #1a1a1a; border-radius: 20px;
     padding: 50px; align-items: center;
+    height: 600px; /* PCは固定高 */
   }
   .book-cover-container { flex: 0 0 35%; display: flex; justify-content: center; }
   .book-cover { max-width: 100%; max-height: 500px; object-fit: contain; }
@@ -43,62 +44,62 @@ body, html {
 ---------------------------------------------------- */
 @media screen and (max-width: 1900px) {
   .book-grid {
-    display: block; height: 100vh;
-    overflow-y: scroll; scroll-snap-type: y mandatory;
+    display: block;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
   }
   .book-card {
-    height: 100vh; width: 100%;
-    display: flex; flex-direction: column;
-    padding: 0; background: var(--bg-main);
-    border-bottom: 1px solid #222;
-    scroll-snap-align: start; scroll-snap-stop: always;
+    height: 100vh; /* 1枚を画面ぴったりに */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    background: var(--bg-main);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
 
-  /* 画像エリア：中央配置 ＆ 上部マージン */
+  /* 上部50%：画像エリア */
   .book-cover-container {
-    flex: 1; 
+    height: 50vh; /* 高さを半分に固定 */
     width: 100%;
-    display: flex; 
+    display: flex;
     justify-content: center;
     align-items: center;
-    padding: 60px 30px 20px;
-    min-height: 0;
+    padding: 50px 30px 20px; /* 上部にマージンを確保 */
   }
-  
   .book-cover-container a {
     display: flex; justify-content: center; align-items: center;
     width: 100%; height: 100%;
   }
-
   .book-cover {
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
   }
 
-  /* 情報エリア（黒いボード）：全情報をここに集約 */
+  /* 下部50%：情報エリア（黒いボード） */
   .book-info {
-    flex: 0 0 auto;
+    height: 50vh; /* 高さを半分に固定 */
     background: var(--bg-card);
     border-top: 1px solid #1a1a1a;
-    border-radius: 32px 32px 0 0;
-    padding: 35px 25px 50px;
+    border-radius: 30px 30px 0 0;
+    padding: 30px 25px 40px;
     box-shadow: 0 -20px 50px rgba(0,0,0,0.9);
-    overflow-y: auto;
-    max-height: 75vh;
+    overflow-y: auto; /* ここで内部スクロールを完結させる */
     -webkit-overflow-scrolling: touch;
   }
 }
 
-/* 共通パーツ設定 */
+/* 共通パーツ */
 .title-author-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
-.book-title { font-size: 24px; font-weight: bold; margin: 0; line-height: 1.2; color: #fff; }
-.book-author { font-size: 15px; color: var(--text-muted); }
+.book-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.2; color: #fff; }
+.book-author { font-size: 14px; color: var(--text-muted); }
 
-.meta-row { display: flex; align-items: center; gap: 18px; margin-bottom: 25px; }
-
-/* 価格は非表示 */
-.book-price { display: none; }
+.meta-row { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+.book-price { display: none; } /* 価格非表示 */
 
 .icon-badge { font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 4px; }
 .badge-ku { background: var(--accent-ku); color: #000; }
@@ -109,4 +110,4 @@ body, html {
   border-left: 5px solid var(--accent-ku);
   padding-left: 15px;
 }
-.summary-text { font-size: 16px; line-height: 1.9; color: #eee; margin: 0; text-align: justify; }
+.summary-text { font-size: 15px; line-height: 1.8; color: #eee; margin: 0; text-align: justify; }

@@ -11,16 +11,15 @@
 * { box-sizing: border-box; }
 
 body, html {
-  margin: 0; padding: 0; height: 100%;
+  margin: 0; padding: 0; 
+  height: 100dvh; /* dvhを採用 */
   background-color: var(--bg-main);
   color: var(--text-main);
   font-family: "Hiragino Sans", "Meiryo", sans-serif;
-  overflow: hidden; /* 全体のはみ出しを禁止 */
+  overflow: hidden;
 }
 
-/* ----------------------------------------------------
-   【PC版：1901px以上の超ワイド】
----------------------------------------------------- */
+/* --- PC版 --- */
 @media screen and (min-width: 1901px) {
   .book-grid {
     display: grid; grid-template-columns: 1fr 1fr;
@@ -32,26 +31,23 @@ body, html {
     display: flex; background: var(--bg-card);
     border: 1px solid #1a1a1a; border-radius: 20px;
     padding: 50px; align-items: center;
-    height: 600px; /* PCは固定高 */
   }
   .book-cover-container { flex: 0 0 35%; display: flex; justify-content: center; }
   .book-cover { max-width: 100%; max-height: 500px; object-fit: contain; }
   .book-info { flex: 1; padding-left: 60px; }
 }
 
-/* ----------------------------------------------------
-   【スマホ・標準PC：1900px以下（リール表示）】
----------------------------------------------------- */
+/* --- スマホ・標準PC（リール版） --- */
 @media screen and (max-width: 1900px) {
   .book-grid {
-    display: block;
-    height: 100vh;
-    overflow-y: scroll;
+    display: block; 
+    height: 100dvh; /* dvhを採用 */
+    overflow-y: scroll; 
     scroll-snap-type: y mandatory;
     -webkit-overflow-scrolling: touch;
   }
   .book-card {
-    height: 100vh; /* 1枚を画面ぴったりに */
+    height: 100dvh; /* 画面ぴったりに固定 */
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -59,36 +55,33 @@ body, html {
     background: var(--bg-main);
     scroll-snap-align: start;
     scroll-snap-stop: always;
+    overflow: hidden; /* カード自体のはみ出しをカット */
   }
 
-  /* 上部50%：画像エリア */
+  /* 上半分50%：画像エリア */
   .book-cover-container {
-    height: 50vh; /* 高さを半分に固定 */
+    height: 50dvh; 
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 50px 30px 20px; /* 上部にマージンを確保 */
+    display: flex; justify-content: center; align-items: center;
+    padding: 40px 30px 20px;
+    flex-shrink: 0; /* 潰されないように固定 */
   }
   .book-cover-container a {
     display: flex; justify-content: center; align-items: center;
     width: 100%; height: 100%;
   }
-  .book-cover {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
-  }
+  .book-cover { max-height: 100%; max-width: 100%; object-fit: contain; }
 
-  /* 下部50%：情報エリア（黒いボード） */
+  /* 下半分50%：情報エリア */
   .book-info {
-    height: 50vh; /* 高さを半分に固定 */
+    height: 50dvh; 
+    flex-shrink: 0; /* 潰されないように固定 */
     background: var(--bg-card);
     border-top: 1px solid #1a1a1a;
     border-radius: 30px 30px 0 0;
-    padding: 30px 25px 40px;
+    padding: 30px 25px 60px; /* 下部に少し余裕 */
     box-shadow: 0 -20px 50px rgba(0,0,0,0.9);
-    overflow-y: auto; /* ここで内部スクロールを完結させる */
+    overflow-y: auto; /* ここでだけスクロール */
     -webkit-overflow-scrolling: touch;
   }
 }
@@ -97,17 +90,11 @@ body, html {
 .title-author-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
 .book-title { font-size: 22px; font-weight: bold; margin: 0; line-height: 1.2; color: #fff; }
 .book-author { font-size: 14px; color: var(--text-muted); }
-
 .meta-row { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
 .book-price { display: none; } /* 価格非表示 */
-
 .icon-badge { font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 4px; }
 .badge-ku { background: var(--accent-ku); color: #000; }
 .badge-pr { background: var(--accent-prime); color: #fff; }
 .star-text { color: var(--star-yellow); font-size: 18px; }
-
-.summary-container {
-  border-left: 5px solid var(--accent-ku);
-  padding-left: 15px;
-}
-.summary-text { font-size: 15px; line-height: 1.8; color: #eee; margin: 0; text-align: justify; }
+.summary-container { border-left: 5px solid var(--accent-ku); padding-left: 15px; }
+.summary-text { font-size: 16px; line-height: 1.8; color: #eee; margin: 0; text-align: justify; }

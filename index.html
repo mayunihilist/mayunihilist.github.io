@@ -2,14 +2,134 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kindle Shelf</title>
-  <link rel="stylesheet" href="style.css?v=15.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>My Kindle Library</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="site-main">
-    <div class="book-grid" id="book-grid"></div>
-  </main>
-  <script src="script.js?v=15.0"></script>
+
+  <div id="menu-btn" class="floating-btn">
+    <div class="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div id="menu-overlay" class="menu-overlay"></div>
+
+  <div id="side-menu" class="side-menu">
+    <div class="menu-header">
+      <h2>Menu</h2>
+      <button id="close-btn" class="close-btn">&times;</button>
+    </div>
+    <div class="menu-content">
+      <div class="toggle-container">
+        <span class="toggle-label">ランダム表示</span>
+        <label class="switch">
+          <input type="checkbox" id="random-toggle-checkbox" checked>
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="book-grid" id="book-grid"></div>
+
+  <script>
+    let isRandom = true; // デフォルトはランダムON
+    let allBooks = [];   // 全データを保持
+
+    // JSONデータの読み込み
+    fetch('books.json')
+      .then(response => response.json())
+      .then(data => {
+        allBooks = data;
+        renderBooks();
+      })
+      .catch(error => console.error('Error loading books.json:', error));
+
+    // 描画処理
+    function renderBooks() {
+      const grid = document.getElementById('book-grid');
+      grid.innerHTML = '';
+
+      // 表示用の配列を作成
+      let displayBooks = [...allBooks];
+
+      // ランダムONなら配列をシャッフル
+      if (isRandom) {
+        for (let i = displayBooks.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [displayBooks[i], displayBooks[j]] = [displayBooks[j], displayBooks[i]];
+        }
+      }
+
+      displayBooks.forEach(book => {
+        const card = document.createElement('div');
+        card.className = 'book-card';
+
+        // バッジの判定
+        let badgeHTML = '';
+        if (book.availability === 'Unlimited') {
+          badgeHTML = `<span class="icon-badge badge-ku">Kindle Unlimited</span>`;
+        } else if (book.availability === 'Prime') {
+          badgeHTML = `<span class="icon-badge badge-pr">Prime Reading</span>`;
+        }
+
+        // レビュー星の生成
+        const fullStars = Math.floor(book.rating);
+        const emptyStars = 5 - fullStars;
+        const starHTML = '★'.repeat(fullStars) + '☆'.repeat(emptyStars);
+
+        card.innerHTML = `
+          <div class="book-cover-container">
+            <a href="${book.url}" target="_blank" rel="noopener noreferrer">
+              <img src="${book.image}" alt="${book.title}" class="book-cover" loading="lazy">
+            </a>
+          </div>
+          <div class="book-info">
+            <div class="title-author-row">
+              <h2 class="book-title">${book.title}</h2>
+              <span class="book-author">${book.author}</span>
+            </div>
+            <div class="meta-row">
+              ${badgeHTML}
+              <div class="review-info">
+                <span class="star-text">${starHTML}</span>
+                <span style="font-size: 12px; color: var(--text-muted); margin-left: 5px;">${book.rating} (${book.reviewCount})</span>
+              </div>
+            </div>
+            <div class="summary-container">
+              <p class="summary-text">${book.summary}</p>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* --- UIインタラクション処理 --- */
+    const menuBtn = document.getElementById('menu-btn');
+    const closeBtn = document.getElementById('close-btn');
+    const sideMenu = document.getElementById('side-menu');
+    const overlay = document.getElementById('menu-overlay');
+    const randomToggleCheckbox = document.getElementById('random-toggle-checkbox');
+
+    // メニューを開閉する関数
+    function toggleMenu() {
+      sideMenu.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+    closeBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+
+    // トグルスイッチが切り替わった時の処理
+    randomToggleCheckbox.addEventListener('change', (e) => {
+      isRandom = e.target.checked;
+      document.getElementById('book-grid').scrollTop = 0; // スクロール位置をリセット
+      renderBooks(); // 再描画
+    });
+  </script>
 </body>
 </html>
